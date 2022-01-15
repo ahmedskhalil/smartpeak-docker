@@ -2,7 +2,7 @@
 #   SmartPeak -- Fast and Accurate CE-, GC- and LC-MS(/MS) Data Processing
 # --------------------------------------------------------------------------
 # Copyright The SmartPeak Team -- Novo Nordisk Foundation
-# Center for Biosustainability, Technical University of Denmark 2018-2021.
+# Center for Biosustainability, Technical University of Denmark 2018-2022.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -30,11 +30,11 @@ RUN apt install -y tzdata
 RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 RUN dpkg-reconfigure --frontend noninteractive tzdata
 RUN apt install -y  git cmake qt5-default libeigen3-dev \
-               					libboost-all-dev libxerces-c-dev \
-               					coinor-libcbc-dev libsvm-dev \
-               					libwildmagic-dev libsqlite3-dev \
-               					libglpk-dev seqan-dev libsdl2-dev libhdf5-dev \
-												cppcheck python3-pip
+               		libboost-all-dev libxerces-c-dev \
+               		coinor-libcbc-dev libsvm-dev \
+               		libwildmagic-dev libsqlite3-dev \
+               		libglpk-dev seqan-dev libsdl2-dev libhdf5-dev \
+					cppcheck python3-pip
 
 FROM dependencies-fetcher AS bin-builder
 # Building OpenMS
@@ -43,9 +43,9 @@ RUN git clone --branch develop --depth 1 https://github.com/OpenMS/OpenMS.git &&
 		cd OpenMS && git -C /tmp/OpenMS submodule update --init && \
 		mkdir build && cd build && \
 		cmake -DBOOST_USE_STATIC=OFF -DHAS_XSERVER=OFF -DWITH_GUI=OFF \
-					-DENABLE_TUTORIALS=OFF -DENABLE_DOCS=OFF -DGIT_TRACKING=OFF \
-					-DENABLE_UPDATE_CHECK=OFF -DCMAKE_BUILD_TYPE=Release -DPYOPENMS=OFF \
-					-DOPENMS_COVERAGE=OFF /tmp/OpenMS
+				-DENABLE_TUTORIALS=OFF -DENABLE_DOCS=OFF -DGIT_TRACKING=OFF \
+				-DENABLE_UPDATE_CHECK=OFF -DCMAKE_BUILD_TYPE=Release -DPYOPENMS=OFF \
+				-DOPENMS_COVERAGE=OFF /tmp/OpenMS
 RUN cd OpenMS/build && make -j2 OpenMS && make install
 
 # SmartPeak superbuild
@@ -61,14 +61,14 @@ RUN cd /tmp && \
 RUN cd /tmp/SmartPeak && \
 		mkdir -p build && cd build && \
 		cmake -DEIGEN_USE_GPU=OFF -DUSE_SUPERBUILD=OFF -G "Unix Makefiles" \
-					-DCMAKE_PREFIX_PATH=/tmp/OpenMS/build/ \
-					-DPLOG_INCLUDE_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/plog/include \
-					-DIMGUI_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/imgui/ \
-					-DIMPLOT_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/implot \
-					-DIMPLOT_INCLUDE_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/implot \
-					-DSQLite3_INCLUDE_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/sqlite \
-					-DSQLite3_LIBRARY=/tmp/SmartPeak/superbuild/Dependencies/Source/sqlite \
-					-DCMAKE_BUILD_TYPE=Release /tmp/SmartPeak && \
+				-DCMAKE_PREFIX_PATH=/tmp/OpenMS/build/ \
+				-DPLOG_INCLUDE_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/plog/include \
+				-DIMGUI_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/imgui/ \
+				-DIMPLOT_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/implot \
+				-DIMPLOT_INCLUDE_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/implot \
+				-DSQLite3_INCLUDE_DIR=/tmp/SmartPeak/superbuild/Dependencies/Source/sqlite \
+				-DSQLite3_LIBRARY=/tmp/SmartPeak/superbuild/Dependencies/Source/sqlite \
+				-DCMAKE_BUILD_TYPE=Release /tmp/SmartPeak && \
 		make -j2 && make install
 
 FROM dependencies-fetcher AS smartpeak-server
