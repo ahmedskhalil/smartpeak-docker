@@ -30,10 +30,10 @@ RUN apt install -y tzdata
 RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 RUN dpkg-reconfigure --frontend noninteractive tzdata
 RUN apt install -y  git cmake qt5-default libeigen3-dev \
-               		libboost-all-dev libxerces-c-dev \
-               		coinor-libcbc-dev libsvm-dev \
-               		libwildmagic-dev libsqlite3-dev \
-               		libglpk-dev seqan-dev libsdl2-dev libhdf5-dev \
+					libboost-all-dev libxerces-c-dev \
+					coinor-libcbc-dev libsvm-dev \
+					libwildmagic-dev libsqlite3-dev \
+					libglpk-dev seqan-dev libsdl2-dev libhdf5-dev \
 					cppcheck python3-pip
 
 FROM dependencies-fetcher AS bin-builder
